@@ -3,9 +3,11 @@ package dao
 import (
 	"database/sql"
 	"fmt"
+	"github.com/jmoiron/sqlx"
 )
 
 var Db *sql.DB // 定义一个全局对象db
+var XDB *sqlx.DB
 
 func InitDb(dburl string) error {
 	var err error
@@ -20,6 +22,17 @@ func InitDb(dburl string) error {
 	}
 	err = Db.Ping()
 	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func InitXDB(dbUrl string) error {
+	var err error
+	fmt.Println(dbUrl)
+	XDB, err = sqlx.Connect("mysql", dbUrl)
+	if err != nil {
+		panic(fmt.Sprintf("initXDB error,err:%v", err))
 		return err
 	}
 	return nil

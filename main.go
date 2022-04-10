@@ -3,34 +3,23 @@ package main
 import (
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/spf13/viper"
 	"go_mysql_demo/dao"
+	"go_mysql_demo/utilinit"
 )
 
 func main() {
-	viper.SetConfigFile("./mysqldemo.yaml") // 指定配置文件路径
-	if err := viper.ReadInConfig(); err != nil {
-		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-			// 配置文件未找到错误；如果需要可以忽略
-			fmt.Println("error:配置文件未找到错误；如果需要可以忽略", err)
-		} else {
-			// 配置文件被找到，但产生了另外的错误
-			fmt.Println("error:配置文件被找到，但产生了另外的错误", err)
-		}
-	}
-	err := dao.InitDb(viper.GetString("dao.url"))
-	if err != nil {
-		fmt.Println("err::", err)
-		return
-	}
-	InsertSqlUser()
+	utilinit.ConfInit()
+	utilinit.InitSQLDb()
+	utilinit.InitXSQLDb()
 
+	//InsertSqlUser()
+	InsertXSqlUser()
 }
 
 func InsertSqlUser() {
 
 	sqlStr := "insert into user(name,age)values(?,?)"
-	exec, err := dao.Db.Exec(sqlStr, "王五", 30)
+	exec, err := dao.Db.Exec(sqlStr, "王五就开了啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊", 31)
 	if err != nil {
 		fmt.Println("InsertSqlUser error", "error", err)
 		return
@@ -41,4 +30,30 @@ func InsertSqlUser() {
 		return
 	}
 	fmt.Println("LastInsertId:::", lastInsertId)
+}
+
+// 批量添加
+func InsertXSqlUser() {
+	//sqlStr := "insert into user(name,age)values(?,?)"
+	//exec, err := dao.XDB.Exec(sqlStr, "小华", 18)
+	users := make([]dao.User, 0)
+	users = append(users, dao.User{
+		Age:  10,
+		Name: "小红",
+	},
+		dao.User{
+			Age:  20,
+			Name: "小绿",
+		})
+	exec, err := dao.XDB.NamedExec(`insert into user (name,age)values (:name,:age)`, users)
+	if err != nil {
+		fmt.Println("InsertXSqlUser error", "error", err)
+		return
+	}
+	insertId, err := exec.LastInsertId()
+	if err != nil {
+		fmt.Println("XLastInsertId error", "error", err)
+		return
+	}
+	fmt.Println("insertId", insertId)
 }
