@@ -3,7 +3,6 @@ package utilinit
 import (
 	"fmt"
 	"github.com/spf13/viper"
-	"go_mysql_demo/dao"
 )
 
 func ConfInit() {
@@ -21,7 +20,7 @@ func ConfInit() {
 }
 
 func InitSQLDb() {
-	err := dao.InitDb(viper.GetString("dao.url"))
+	err := InitDb(viper.GetString("dao.url"))
 	if err != nil {
 		fmt.Println("err::", err)
 		return
@@ -29,7 +28,7 @@ func InitSQLDb() {
 }
 
 func InitXSQLDb() {
-	err := dao.InitXDB(viper.GetString("dao.url"))
+	err := InitXDB(viper.GetString("dao.url"))
 	if err != nil {
 		fmt.Println("err::", err)
 		return

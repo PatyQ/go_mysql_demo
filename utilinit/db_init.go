@@ -1,4 +1,4 @@
-package dao
+package utilinit
 
 import (
 	"database/sql"

@@ -11,15 +11,17 @@ func main() {
 	utilinit.ConfInit()
 	utilinit.InitSQLDb()
 	utilinit.InitXSQLDb()
+	utilinit.RedisInit()
 
+	dao.RedisExample()
 	//InsertSqlUser()
-	InsertXSqlUser()
+	//InsertXSqlUser()
 }
 
 func InsertSqlUser() {
 
 	sqlStr := "insert into user(name,age)values(?,?)"
-	exec, err := dao.Db.Exec(sqlStr, "王五就开了啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊", 31)
+	exec, err := utilinit.Db.Exec(sqlStr, "王五就开了啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊", 31)
 	if err != nil {
 		fmt.Println("InsertSqlUser error", "error", err)
 		return
@@ -45,7 +47,7 @@ func InsertXSqlUser() {
 			Age:  20,
 			Name: "小绿",
 		})
-	exec, err := dao.XDB.NamedExec(`insert into user (name,age)values (:name,:age)`, users)
+	exec, err := utilinit.XDB.NamedExec(`insert into user (name,age)values (:name,:age)`, users)
 	if err != nil {
 		fmt.Println("InsertXSqlUser error", "error", err)
 		return
