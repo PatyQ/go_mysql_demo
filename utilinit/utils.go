@@ -5,6 +5,7 @@ import (
 	"fmt"
 )
 
+// 获取json string
 func JsonString(b interface{}) string {
 
 	marshal, err := json.Marshal(b)
